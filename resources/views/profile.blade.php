@@ -85,13 +85,6 @@
             </div>
             <!-- Posts -->
             <div id="posts" class="grid grid-cols-3 gap-1 mt-1">
-                <div class="relative cursor-pointer" onclick="togglePostModal('https://picsum.photos/200', '2023-10-01', 'Caption for post 1')">
-                    <img src="https://picsum.photos/200" alt="Post 1" class="w-full h-full object-cover">
-                    <i class="fas fa-thumbtack absolute top-2 right-2 text-white"></i>
-                </div>
-                <div class="cursor-pointer" onclick="togglePostModal('https://picsum.photos/200', '2023-10-02', 'Caption for post 2')">
-                    <img src="https://picsum.photos/200" alt="Post 2" class="w-full h-full object-cover">
-                </div>
                 <div class="cursor-pointer" onclick="togglePostModal('https://picsum.photos/200', '2023-10-03', 'Caption for post 3')">
                     <img src="https://picsum.photos/200" alt="Post 3" class="w-full h-full object-cover">
                 </div>
@@ -99,37 +92,8 @@
                     <img src="https://picsum.photos/200" alt="Post 4" class="w-full h-full object-cover">
                     <i class="fas fa-video absolute top-2 right-2 text-white"></i>
                 </div>
-                <div class="relative cursor-pointer" onclick="togglePostModal('https://picsum.photos/200', '2023-10-05', 'Caption for post 5')">
-                    <img src="https://picsum.photos/200" alt="Post 5" class="w-full h-full object-cover">
-                    <i class="fas fa-video absolute top-2 right-2 text-white"></i>
-                </div>
-                <div class="relative cursor-pointer" onclick="togglePostModal('https://picsum.photos/200', '2023-10-06', 'Caption for post 6')">
-                    <img src="https://picsum.photos/200" alt="Post 6" class="w-full h-full object-cover">
-                    <i class="fas fa-video absolute top-2 right-2 text-white"></i>
-                </div>
-                <div class="cursor-pointer" onclick="togglePostModal('https://picsum.photos/200', '2023-10-07', 'Caption for post 7')">
-                    <img src="https://picsum.photos/200" alt="Post 7" class="w-full h-full object-cover">
-                </div>
-                <div class="cursor-pointer" onclick="togglePostModal('https://picsum.photos/200', '2023-10-08', 'Caption for post 8')">
-                    <img src="https://picsum.photos/200" alt="Post 8" class="w-full h-full object-cover">
-                </div>
-                <div class="cursor-pointer" onclick="togglePostModal('https://picsum.photos/200', '2023-10-09', 'Caption for post 9')">
-                    <img src="https://picsum.photos/200" alt="Post 9" class="w-full h-full object-cover">
-                </div>
-                <div class="cursor-pointer" onclick="togglePostModal('https://picsum.photos/200', '2023-10-09', 'Caption for post 9')">
-                    <img src="https://picsum.photos/200" alt="Post 9" class="w-full h-full object-cover">
-                </div>
-                <div class="cursor-pointer" onclick="togglePostModal('https://picsum.photos/200', '2023-10-09', 'Caption for post 9')">
-                    <img src="https://picsum.photos/200" alt="Post 9" class="w-full h-full object-cover">
-                </div>
-                <div class="cursor-pointer" onclick="togglePostModal('https://picsum.photos/200', '2023-10-09', 'Caption for post 9')">
-                    <img src="https://picsum.photos/200" alt="Post 9" class="w-full h-full object-cover">
-                </div>
-                <div class="cursor-pointer" onclick="togglePostModal('https://picsum.photos/200', '2023-10-09', 'Caption for post 9')">
-                    <img src="https://picsum.photos/200" alt="Post 9" class="w-full h-full object-cover">
-                </div>
-                <div class="cursor-pointer" onclick="togglePostModal('https://picsum.photos/200', '2023-10-09', 'Caption for post 9')">
-                    <img src="https://picsum.photos/200" alt="Post 9" class="w-full h-full object-cover">
+                <div class="cursor-pointer" onclick="togglePostModal('https://picsum.photos/200', '2023-10-03', 'Caption for post 3')">
+                    <img src="https://picsum.photos/200" alt="Post 3" class="w-full h-full object-cover">
                 </div>
             </div>
             <!-- Footer -->
@@ -177,11 +141,14 @@
         <!-- Upload Modal -->
         <div id="uploadModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
             <div class="bg-white p-4 rounded-lg max-w-md w-full">
-                <h2 class="text-xl font-semibold mb-4">Upload Photo/Video</h2>
-                <input type="file" class="mb-4">
-                <textarea class="w-full p-2 border rounded mb-4" placeholder="Write a caption..."></textarea>
-                <button class="bg-blue-500 text-white px-4 py-2 rounded" onclick="toggleUploadModal()">Post</button>
-                <button class="mt-4 bg-red-500 text-white px-4 py-2 rounded" onclick="toggleUploadModal()">Close</button>
+            <h2 class="text-xl font-semibold mb-4">Upload Photo/Video</h2>
+            <form action="{{ route('profile.create-post', ['username' => auth()->user()->username]) }}" method="post" enctype="multipart/form-data">
+                @csrf
+                <input type="file" name="file" class="mb-4" required>
+                <textarea name="caption" class="w-full p-2 border rounded mb-4" placeholder="Write a caption..."></textarea>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Post</button>
+                <button type="button" class="mt-4 bg-red-500 text-white px-4 py-2 rounded" onclick="toggleUploadModal()">Close</button>
+            </form>
             </div>
         </div>
 

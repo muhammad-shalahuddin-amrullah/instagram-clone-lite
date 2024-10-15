@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\Models\User;
+use App\Models\Posts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 class profileController extends Controller
@@ -55,6 +56,29 @@ class profileController extends Controller
         return redirect()->route('login.index');
     }
 
-    
+    public function createPost(Request $request, $username)
+    {
+        $user = User::where('username', $username)->first();
+        if (!$user) {
+            abort(404);
+        }
+
+        $validatedData = $request->validate([
+            'caption' => 'required|string|max:255',
+            'file' => 'required|file|mimes:jpeg,png,jpg,mp4,mov|max:153600',
+        ]);
+
+        $fileName = time().'.'.$validatedData['file']->extension();
+        $validatedData['file']->move(public_path('uploads'), $fileName);
+
+        Posts::create([
+            'user_id' => $user->id,
+            'caption' => $validatedData['caption'],
+            'file' => 'uploads/'.$fileName,
+            'file_type' => $validatedData['file']->getClientMimeType(),
+        ]);
+
+        return redirect()->route('profile.index', $user->username);
+    }
 
 }
