@@ -20,7 +20,7 @@ Route::group(['prefix'=>'{username}','middleware'=>['auth','check.name'],'as'=>'
     Route::get('/', [profileController::class, 'index'])->name('index');
     Route::match(['get', 'put'], '/update', [profileController::class, 'update'])->name('update');
     Route::post('/logout', [profileController::class, 'logout'])->name('logout');
-
+    Route::get('/create-post', [profileController::class, 'createPost'])->name('create-post');
 });
 
 Route::fallback(function() {

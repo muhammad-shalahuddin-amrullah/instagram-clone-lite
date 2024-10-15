@@ -55,4 +55,6 @@ class profileController extends Controller
         return redirect()->route('login.index');
     }
 
+    
+
 }
