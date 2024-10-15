@@ -12,7 +12,9 @@ class profileController extends Controller
         if (!$user) {
             abort(404);
         }
-        return view('profile', compact('user'));
+
+        $posts = Posts::where('user_id', $user->id)->get();
+        return view('profile', ['user' => $user, 'posts' => $posts]);
     }
 
     public function update(Request $request, $username)

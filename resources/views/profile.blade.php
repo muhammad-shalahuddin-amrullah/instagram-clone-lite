@@ -85,16 +85,16 @@
             </div>
             <!-- Posts -->
             <div id="posts" class="grid grid-cols-3 gap-1 mt-1">
-                <div class="cursor-pointer" onclick="togglePostModal('https://picsum.photos/200', '2023-10-03', 'Caption for post 3')">
-                    <img src="https://picsum.photos/200" alt="Post 3" class="w-full h-full object-cover">
-                </div>
-                <div class="relative cursor-pointer" onclick="togglePostModal('https://picsum.photos/200', '2023-10-04', 'Caption for post 4')">
-                    <img src="https://picsum.photos/200" alt="Post 4" class="w-full h-full object-cover">
-                    <i class="fas fa-video absolute top-2 right-2 text-white"></i>
-                </div>
-                <div class="cursor-pointer" onclick="togglePostModal('https://picsum.photos/200', '2023-10-03', 'Caption for post 3')">
-                    <img src="https://picsum.photos/200" alt="Post 3" class="w-full h-full object-cover">
-                </div>
+                @foreach($posts as $post)
+                    <div class="relative cursor-pointer" onclick="togglePostModal('{{ asset($post->file) }}', '{{ $post->created_at->format('Y-m-d') }}', '{{ $post->caption }}', '{{ $post->file_type }}')" style="width: 100%; height: 0; padding-bottom: 100%;">
+                        @if(strpos($post->file_type, 'video') !== false)
+                            <video src="{{ asset($post->file) }}" class="absolute top-0 left-0 w-full h-full object-cover" muted></video>
+                            <i class="fas fa-video absolute top-2 right-2 text-white"></i>
+                        @else
+                            <img src="{{ asset($post->file) }}" alt="Post {{ $post->id }}" class="absolute top-0 left-0 w-full h-full object-cover">
+                        @endif
+                    </div>
+                @endforeach
             </div>
             <!-- Footer -->
             <div class="fixed bottom-0 left-0 right-0 bg-white border-t">
@@ -110,33 +110,33 @@
 
         <!-- Post Modal -->
         <div id="postModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-            <div class="bg-white p-4 rounded-lg max-w-md w-full">
-            <div class="flex items-center space-x-2 mb-4">
-                <img id="postUserImage" src="https://randomuser.me/api/portraits/men/1.jpg" alt="User profile picture" class="w-10 h-10 rounded-full">
-                <span id="postUsername" class="font-bold">john_doe</span>
-                <span>and <span class="font-bold">150 others</span></span>
-                <i class="fas fa-ellipsis-h ml-auto"></i>
-            </div>
-            <img id="postImage" src="" alt="Post Image" class="w-full h-auto mb-4 rounded-lg">
-            <div class="flex items-center space-x-2 mb-4">
-                <i class="far fa-heart text-2xl"></i>
-                <i class="far fa-comment text-2xl"></i>
-                <i class="far fa-paper-plane text-2xl"></i>
-                <i class="far fa-bookmark text-2xl ml-auto"></i>
-            </div>
-            <div class="mb-2">
-                <span class="font-bold">150 likes</span>
-            </div>
-            <div class="mb-2">
-                <span id="postUsernameCaption" class="font-bold">john_doe</span>
-                <span id="postCaption" class="text-black"></span>
-            </div>
-            <div class="text-gray-500 mb-2">
-                <span id="postDate"></span>
-            </div>
-            <button class="mt-4 bg-red-500 text-white px-4 py-2 rounded" onclick="togglePostModal()">Close</button>
-            </div>
+    <div class="bg-white p-4 rounded-lg max-w-md w-full">
+        <div class="flex items-center space-x-2 mb-4">
+            <img id="postUserImage" src="https://randomuser.me/api/portraits/men/1.jpg" alt="User profile picture" class="w-10 h-10 rounded-full">
+            <span id="postUsername" class="font-bold">john_doe</span>
+            <span>and <span class="font-bold">150 others</span></span>
+            <i class="fas fa-ellipsis-h ml-auto"></i>
         </div>
+        <div id="postMediaContainer" class="w-full h-auto mb-4 rounded-lg"></div>
+        <div class="flex items-center space-x-2 mb-4">
+            <i class="far fa-heart text-2xl"></i>
+            <i class="far fa-comment text-2xl"></i>
+            <i class="far fa-paper-plane text-2xl"></i>
+            <i class="far fa-bookmark text-2xl ml-auto"></i>
+        </div>
+        <div class="mb-2">
+            <span class="font-bold">150 likes</span>
+        </div>
+        <div class="mb-2">
+            <span id="postUsernameCaption" class="font-bold">john_doe</span>
+            <span id="postCaption" class="text-black"></span>
+        </div>
+        <div class="text-gray-500 mb-2">
+            <span id="postDate"></span>
+        </div>
+        <button class="mt-4 bg-red-500 text-white px-4 py-2 rounded" onclick="togglePostModal()">Close</button>
+    </div>
+</div>
 
         <!-- Upload Modal -->
         <div id="uploadModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
@@ -244,21 +244,42 @@
                 togglePassword.classList.toggle('fa-eye-slash');
             }
 
-            function togglePostModal(imageSrc = '', date = '', caption = '') {
-                const modal = document.getElementById('postModal');
-                const postImage = document.getElementById('postImage');
-                const postDate = document.getElementById('postDate');
-                const postCaption = document.getElementById('postCaption');
+            function togglePostModal(mediaSrc = '', date = '', caption = '', fileType = '') {
+        const modal = document.getElementById('postModal');
+        const postMediaContainer = document.getElementById('postMediaContainer');
+        const postDate = document.getElementById('postDate');
+        const postCaption = document.getElementById('postCaption');
 
-                if (modal.classList.contains('hidden')) {
-                    postImage.src = imageSrc;
-                    postDate.textContent = date;
-                    postCaption.textContent = caption;
-                    modal.classList.remove('hidden');
-                } else {
-                    modal.classList.add('hidden');
-                }
+        if (modal.classList.contains('hidden')) {
+            postMediaContainer.innerHTML = '';
+
+            if (fileType.includes('video')) {
+                const videoElement = document.createElement('video');
+                videoElement.src = mediaSrc;
+                videoElement.controls = true;
+                videoElement.classList.add('w-full', 'h-auto', 'rounded-lg');
+                postMediaContainer.appendChild(videoElement);
+                videoElement.play();
+            } else {
+                const imgElement = document.createElement('img');
+                imgElement.src = mediaSrc;
+                imgElement.alt = 'Post Image';
+                imgElement.classList.add('w-full', 'h-auto', 'rounded-lg');
+                postMediaContainer.appendChild(imgElement);
             }
+
+            postDate.textContent = date;
+            postCaption.textContent = caption;
+            modal.classList.remove('hidden');
+        } else {
+            const videoElement = postMediaContainer.querySelector('video');
+            if (videoElement) {
+                videoElement.pause();
+                videoElement.currentTime = 0;
+            }
+            modal.classList.add('hidden');
+        }
+    }
 
             function toggleUploadModal() {
                 const modal = document.getElementById('uploadModal');
