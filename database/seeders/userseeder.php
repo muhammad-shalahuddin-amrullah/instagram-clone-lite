@@ -13,12 +13,12 @@ class userseeder extends Seeder
     {
         $users = [
             [
-                'name'      => 'Muhammad Shalahuddin Amrullah',
+                'name'      => 'Nama User Kesatu',
                 'email'     => 'me@gmail.com',
                 'password'  => '12345678',
                 'username'  => 'user_01',
                 'bio'       => null,
-                'profile_picture' => 'images/default_profile_picture.png',
+                'profile_picture' => 'images/default_profile_picture.jpg',
             ],
             [
                 'name'      => 'Nama User Kedua',
@@ -26,7 +26,7 @@ class userseeder extends Seeder
                 'password'  => '12345678',
                 'username'  => 'user_02',
                 'bio'       => 'Bio user kedua',
-                'profile_picture' => 'images/default_profile_picture.png',
+                'profile_picture' => 'images/default_profile_picture2.jpg',
             ],
         ];
 

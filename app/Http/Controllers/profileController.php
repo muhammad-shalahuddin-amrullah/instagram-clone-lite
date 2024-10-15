@@ -80,7 +80,18 @@ class profileController extends Controller
             'file_type' => $validatedData['file']->getClientMimeType(),
         ]);
 
-        return redirect()->route('profile.index', $user->username);
+        return redirect()->back();
+    }
+
+    public function home($username)
+    {
+        $user = User::where('username', $username)->first();
+        if (!$user) {
+            abort(404);
+        }
+
+        $posts = Posts::with('user')->orderBy('created_at', 'desc')->get();
+        return view('home', ['user' => $user, 'posts' => $posts]);
     }
 
 }

@@ -37,7 +37,7 @@
             <!-- Profile Info -->
             <div class="p-4">
                 <div class="flex items-center">
-                    <img src="{{ $user->profile_picture }}" alt="Profile picture" class="w-20 h-20 rounded-full">
+                    <img src="{{ url($user->profile_picture) }}" alt="Profile picture" class="w-20 h-20 rounded-full">
                     <div class="ml-4">
                         <h2 class="text-xl font-semibold">{{ $user->username }}</h2>
                         <div class="flex mt-2">
@@ -99,11 +99,15 @@
             <!-- Footer -->
             <div class="fixed bottom-0 left-0 right-0 bg-white border-t">
                 <div class="flex justify-around py-2">
-                    <i class="fas fa-home text-xl"></i>
+                    <a href="{{ route('profile.home', ['username' => auth()->user()->username]) }}">
+                        <i class="fas fa-home text-xl"></i>
+                    </a>
                     <i class="fas fa-search text-xl"></i>
                     <i class="fas fa-plus text-xl cursor-pointer" onclick="toggleUploadModal()"></i>
                     <i class="fas fa-comment-dots text-xl"></i>
-                    <img src="https://picsum.photos/200" alt="Profile picture" class="w-6 h-6 rounded-full self-center">
+                    <a href="{{ route('profile.index', ['username' => auth()->user()->username]) }}">
+                        <img src="https://picsum.photos/200" alt="Profile picture" class="w-6 h-6 rounded-full self-center">
+                    </a>
                 </div>
             </div>
         </div>

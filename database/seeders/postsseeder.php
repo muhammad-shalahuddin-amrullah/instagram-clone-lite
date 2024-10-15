@@ -16,14 +16,14 @@ class PostsSeeder extends Seeder
         $posts = [
             [
                 'user_id' => 1,
-                'caption' => 'First post caption',
-                'file' => 'https://example.com/image1.jpg',
+                'caption' => 'First post caption user 1',
+                'file' => 'uploads/default_post_image.jpg',
                 'file_type' => 'image',
             ],
             [
                 'user_id' => 2,
-                'caption' => 'Second post caption',
-                'file' => 'https://example.com/image2.jpg',
+                'caption' => 'First post caption user 2',
+                'file' => 'uploads/default_post_image2.jpg',
                 'file_type' => 'image',
             ],
             // Add more posts as needed

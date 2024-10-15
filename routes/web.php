@@ -6,7 +6,7 @@ use App\Http\Controllers\ProfileController;
 
 Route::get('/', function(){
     if (auth()->check()) {
-        return redirect()->route('profile.index', ['username' => auth()->user()->username]);
+        return redirect()->route('profile.home', ['username' => auth()->user()->username]);
     }
     return redirect()->route('login.index');
 });
@@ -21,15 +21,9 @@ Route::group(['prefix'=>'{username}','middleware'=>['auth','check.name'],'as'=>'
     Route::match(['get', 'put'], '/update', [profileController::class, 'update'])->name('update');
     Route::post('/logout', [profileController::class, 'logout'])->name('logout');
     Route::match(['get', 'post'], '/create-post', [profileController::class, 'createPost'])->name('create-post');
+    Route::get('/home', [profileController::class, 'home'])->name('home');
 });
 
 Route::fallback(function() {
     return redirect('/');
 });
-
-    //Route::get('/', [profileController::class, 'friend'])->name('friend.index');
-// Route::group(['prefix'=>'{username}','middleware'=>['auth','can:access-profile'],'as'=>'profile.'], function(){
-//     Route::get('/', [profileController::class, 'index'])->name('index');
-//     Route::match(['get', 'put'], '/update', [profileController::class, 'update'])->name('update');
-//     Route::post('/logout', [profileController::class, 'logout'])->name('logout');
-// });
