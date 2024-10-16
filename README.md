@@ -1,18 +1,26 @@
 # Instagram-Clone-Lite
 
-Instagram Clone Lite is a web application built using Laravel, designed to mimic the core functionalities of Instagram. This application provides various features for user registration, login, profile management, and post creation.
-
-## Prerequisites
-
-- Make sure Docker and Docker Compose are installed on your system.
-- If using Windows, make sure Docker Desktop is enabled.
+Instagram Clone Lite is a web application built using Laravel 10, designed to mimic the core functionalities of Instagram. This application provides various features for user registration, login, profile management, and post creation.
 
 ## Features
 
 - User registration and authentication
 - Profile management with the ability to update profile details and upload profile pictures
 - Post creation with support for images and videos
-- REST API for integration with other applications
+- User login and logout functionality
+- Viewing and managing user posts
+- Database migration for setting up the application
+- Error handling and fallback routes for undefined paths
+### Features
+- Creating pages that do not exist yet
+- Implementing like and comment functionality
+
+## Prerequisites
+
+- Make sure Docker and Docker Compose are installed on your system.
+- If using Windows, make sure Docker Desktop is enabled.
+
+
 
 ## Installation
 
