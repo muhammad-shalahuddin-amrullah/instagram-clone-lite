@@ -116,10 +116,9 @@
         <div id="postModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white p-4 rounded-lg max-w-md w-full">
         <div class="flex items-center space-x-2 mb-4">
-            <img id="postUserImage" src="https://randomuser.me/api/portraits/men/1.jpg" alt="User profile picture" class="w-10 h-10 rounded-full">
-            <span id="postUsername" class="font-bold">john_doe</span>
-            <span>and <span class="font-bold">150 others</span></span>
-            <i class="fas fa-ellipsis-h ml-auto"></i>
+            <img id="postUserImage" src="{{ url($post->user->profile_picture) }}" alt="User profile picture" class="w-10 h-10 rounded-full">
+            <span id="postUsername" class="font-bold">{{ ($post->user->username) }}</span>
+
         </div>
         <div id="postMediaContainer" class="w-full h-auto mb-4 rounded-lg"></div>
         <div class="flex items-center space-x-2 mb-4">
@@ -132,7 +131,7 @@
             <span class="font-bold">150 likes</span>
         </div>
         <div class="mb-2">
-            <span id="postUsernameCaption" class="font-bold">john_doe</span>
+            <span id="postUsernameCaption" class="font-bold">{{ ($post->user->username) }}</span>
             <span id="postCaption" class="text-black"></span>
         </div>
         <div class="text-gray-500 mb-2">
@@ -204,36 +203,40 @@
         <!-- Archive Modal -->
         <div id="archiveModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
             <div class="bg-white p-4 rounded-lg max-w-md w-full">
-                <h2 class="text-xl font-semibold mb-4">Archive</h2>
-                <table class="w-full mb-4">
-                    <thead>
-                        <tr>
-                            <th class="border px-2 py-1">Photo/Video</th>
-                            <th class="border px-2 py-1">Post Date</th>
-                            <th class="border px-2 py-1">Caption</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="border px-2 py-1"><img src="https://picsum.photos/200.jpg" alt="Post 1" class="w-12 h-12 object-cover"></td>
-                            <td class="border px-2 py-1">2023-10-01</td>
-                            <td class="border px-2 py-1">Caption for post 1</td>
-                        </tr>
-                        <tr>
-                            <td class="border px-2 py-1"><img src="https://picsum.photos/200.jpg" alt="Post 2" class="w-12 h-12 object-cover"></td>
-                            <td class="border px-2 py-1">2023-10-02</td>
-                            <td class="border px-2 py-1">Caption for post 2</td>
-                        </tr>
-                        <!-- Add more rows as needed -->
-                    </tbody>
-                </table>
-                <div class="mb-4">
-                    <label class="block mb-2">Filter by date:</label>
-                    <input type="date" class="w-full p-2 border rounded" oninput="filterArchive('xlsx')">
-                </div>
-                <button class="bg-green-500 text-white px-4 py-2 rounded mb-4" onclick="downloadArchive('xlsx')">Download XLSX</button>
-                <button class="bg-green-500 text-white px-4 py-2 rounded mb-4" onclick="downloadArchive('pdf')">Download PDF</button>
-                <button class="mt-4 bg-red-500 text-white px-4 py-2 rounded" onclick="toggleArchiveModal()">Close</button>
+            <h2 class="text-xl font-semibold mb-4">Archive</h2>
+            <div class="mb-4">
+                <label class="block mb-2">Filter by date:</label>
+                <input type="date" class="w-full p-2 border rounded" oninput="filterArchive()">
+            </div>
+            <table class="w-full mb-4">
+                <thead>
+                <tr>
+                    <th class="border px-2 py-1">Photo/Video</th>
+                    <th class="border px-2 py-1">Post Date</th>
+                    <th class="border px-2 py-1">Caption</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($posts as $post)
+                    @if($post->user_id == auth()->user()->id)
+                    <tr>
+                        <td class="border px-2 py-1">
+                        @if(strpos($post->file_type, 'video') !== false)
+                            <video src="{{ asset($post->file) }}" class="w-12 h-12 object-cover" muted></video>
+                        @else
+                            <img src="{{ asset($post->file) }}" alt="Post {{ $post->id }}" class="w-12 h-12 object-cover">
+                        @endif
+                        </td>
+                        <td class="border px-2 py-1">{{ $post->created_at->format('Y-m-d') }}</td>
+                        <td class="border px-2 py-1">{{ $post->caption }}</td>
+                    </tr>
+                    @endif
+                @endforeach
+                </tbody>
+            </table>
+            <button class="bg-green-500 text-white px-4 py-2 rounded mb-4" onclick="downloadArchive('xlsx')">Download XLSX</button>
+            <button class="bg-green-500 text-white px-4 py-2 rounded mb-4" onclick="downloadArchive('pdf')">Download PDF</button>
+            <button class="mt-4 bg-red-500 text-white px-4 py-2 rounded" onclick="toggleArchiveModal()">Close</button>
             </div>
         </div>
 
@@ -320,38 +323,66 @@
 
             function downloadArchive(format) {
                 const table = document.querySelector('#archiveModal table');
+                const filterInput = document.querySelector('input[type="date"]');
+                const filterValue = filterInput.value;
                 const rows = Array.from(table.querySelectorAll('tr')).map(row => Array.from(row.querySelectorAll('th, td')).map(cell => {
                     const img = cell.querySelector('img');
-                    return img ? img.src : cell.innerText;
+                    const video = cell.querySelector('video');
+                    if (img) {
+                        return img.src;
+                    } else if (video) {
+                        return video.src;
+                    } else {
+                        return cell.innerText;
+                    }
                 }));
 
+                const filteredRows = rows.filter((row, index) => {
+                    if (index === 0) return true; // Keep header row
+                    const date = row[1];
+                    return filterValue ? date.includes(filterValue) : true;
+                });
+
+                const exportDate = filterValue ? filterValue : 'all';
+                const exportTitle = `Archive of ${'{{ $user->username }}'} - ${exportDate}`;
+
                 if (format === 'xlsx') {
-                    const ws = XLSX.utils.aoa_to_sheet(rows);
+                    const ws = XLSX.utils.aoa_to_sheet(filteredRows);
+                    const colWidths = filteredRows[0].map((_, colIndex) => {
+                        return Math.max(...filteredRows.map(row => row[colIndex].toString().length)) * 1.2;
+                    });
+                    ws['!cols'] = colWidths.map(width => ({ wch: width }));
                     const wb = XLSX.utils.book_new();
                     XLSX.utils.book_append_sheet(wb, ws, 'Archive');
-                    XLSX.writeFile(wb, 'archive.xlsx');
+                    XLSX.writeFile(wb, `${exportTitle}.xlsx`);
                 } else if (format === 'pdf') {
                     const { jsPDF } = window.jspdf;
                     const doc = new jsPDF();
 
-                    doc.text('Archive', 20, 10);
+                    doc.setFontSize(10); // Set font size to 10
+                    doc.text(exportTitle, 20, 10);
 
                     let startY = 20;
-                    rows.forEach((row, rowIndex) => {
+                    filteredRows.forEach((row, rowIndex) => {
                         row.forEach((cell, colIndex) => {
-                            if (colIndex === 0 && rowIndex > 0 && row[colIndex].startsWith('http')) {
-                                doc.addImage(row[colIndex], 'JPEG', 20 + colIndex * 50, startY + rowIndex * 10, 10, 10); // Gambar kecil 10x10
+                            const text = cell;
+                            const textWidth = doc.getTextWidth(text);
+                            const colWidth = 50;
+                            const x = 20 + colIndex * colWidth;
+                            const y = startY + rowIndex * 10;
+
+                            if (textWidth > colWidth) {
+                                const splitText = doc.splitTextToSize(text, colWidth);
+                                doc.text(splitText, x, y);
                             } else {
-                                doc.text(cell, 20 + colIndex * 50, startY + rowIndex * 10);
+                                doc.text(text, x, y);
                             }
                         });
                     });
 
-                    doc.save('archive.pdf');
+                    doc.save(`${exportTitle}.pdf`);
                 }
             }
-
-
 
             function filterArchive() {
                 const table = document.querySelector('table');
@@ -363,13 +394,16 @@
                         const dateCell = row.querySelector('td:nth-child(2)');
                         const date = dateCell.textContent;
                         if (date.includes(filterValue)) {
-                        row.style.display = '';
+                            row.style.display = '';
                         } else {
-                        row.style.display = 'none';
+                            row.style.display = 'none';
                         }
                     });
                 });
             }
+
+            // Call filterArchive function to ensure it runs immediately
+            filterArchive();
         </script>
     </body>
 </html>
