@@ -57,6 +57,16 @@ Would you like to create it? (yes/no) [no]
 ```
 Type `yes` to create the database.
 
+- Run the user and post seeders
+```bash
+php artisan db:seed --class=userseeder
+php artisan db:seed --class=postsseeder
+```
+- Start the Laravel development server
+```bash
+php artisan serve
+```
+- Open your browser and navigate to `http://127.0.0.1:8000` to access the application.
 
 
 - Copy the .env.example file into .env
