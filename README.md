@@ -44,6 +44,10 @@ DB_DATABASE=instagram
 DB_USERNAME=your_database_username
 DB_PASSWORD=your_database_password
 ```
+- Run database migrations
+```bash
+php artisan migrate
+```
 
 
 
