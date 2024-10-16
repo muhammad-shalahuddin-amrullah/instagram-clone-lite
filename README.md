@@ -48,6 +48,14 @@ DB_PASSWORD=your_database_password
 ```bash
 php artisan migrate
 ```
+If you see the following warning:
+```bash
+WARN  The database 'instagram' does not exist on the 'mysql' connection.
+
+Would you like to create it? (yes/no) [no]
+❯
+```
+Type `yes` to create the database.
 
 
 
