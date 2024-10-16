@@ -1,5 +1,5 @@
+![Instagram Clone Lite Mockup](preview.png)
 # Instagram-Clone-Lite
-![Instagram Clone Lite Mockup](path/to/your/mockup-image.png)
 
 Instagram Clone Lite is a web application built using Laravel 10, designed to mimic the core functionalities of Instagram. This application provides various features for user registration, login, profile management, and post creation.
 
