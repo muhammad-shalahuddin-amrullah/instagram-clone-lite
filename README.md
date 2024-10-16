@@ -11,22 +11,21 @@ Instagram Clone Lite is a web application built using Laravel 10, designed to mi
 - Viewing and managing user posts
 - Database migration for setting up the application
 - Error handling and fallback routes for undefined paths
-### Features
+### Next Features
 - Creating pages that do not exist yet
 - Implementing like and comment functionality
 
 ## Prerequisites
 
-- Make sure Docker and Docker Compose are installed on your system.
-- If using Windows, make sure Docker Desktop is enabled.
-
+- Ensure that a web server (such as Apache) and MySQL are available on your system.
+- If using Windows, you can use Laragon.
 
 
 ## Installation
 
 - Clone this repository
 ```bash
-git clone https://github.com/your-username/instagram-clone-lite.git
+git clone https://github.com/muhammad-shalahuddin-amrullah/instagram-clone-lite.git
 ```
 - Enter the project directory
 ```bash
@@ -36,16 +35,20 @@ cd instagram-clone-lite
 ```bash
 composer install
 ```
-- Copy the .env.example file into .env
 - Open the .env file, find the DB_CONNECTION, DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, and DB_PASSWORD lines, then fill them with values as below:
 ```bash
 DB_CONNECTION=mysql
-DB_HOST=db
+DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=instagram_clone
-DB_USERNAME=root
-DB_PASSWORD=password
+DB_DATABASE=instagram
+DB_USERNAME=your_database_username
+DB_PASSWORD=your_database_password
 ```
+
+
+
+- Copy the .env.example file into .env
+
 - Run Docker Compose
 ```bash
 docker-compose up -d
