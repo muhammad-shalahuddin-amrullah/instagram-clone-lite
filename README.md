@@ -11,6 +11,7 @@ Instagram Clone Lite is a web application built using Laravel 10, designed to mi
 - Viewing and managing user posts
 - Database migration for setting up the application
 - Error handling and fallback routes for undefined paths
+- Exporting archives in XLSX and PDF formats
 ### Next Features
 - Creating pages that do not exist yet
 - Implementing like and comment functionality
