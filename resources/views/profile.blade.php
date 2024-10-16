@@ -106,7 +106,7 @@
                     <i class="fas fa-plus text-xl cursor-pointer" onclick="toggleUploadModal()"></i>
                     <i class="fas fa-comment-dots text-xl"></i>
                     <a href="{{ route('profile.index', ['username' => auth()->user()->username]) }}">
-                        <img src="https://picsum.photos/200" alt="Profile picture" class="w-6 h-6 rounded-full self-center">
+                        <img src="{{ url($user->profile_picture) }}" alt="Profile picture" class="w-6 h-6 rounded-full self-center">
                     </a>
                 </div>
             </div>
@@ -116,8 +116,8 @@
         <div id="postModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white p-4 rounded-lg max-w-md w-full">
         <div class="flex items-center space-x-2 mb-4">
-            <img id="postUserImage" src="{{ url($post->user->profile_picture) }}" alt="User profile picture" class="w-10 h-10 rounded-full">
-            <span id="postUsername" class="font-bold">{{ ($post->user->username) }}</span>
+            <img id="postUserImage" src="{{ url($user->profile_picture) }}" alt="User profile picture" class="w-10 h-10 rounded-full">
+            <span id="postUsername" class="font-bold">{{ ($user->username) }}</span>
 
         </div>
         <div id="postMediaContainer" class="w-full h-auto mb-4 rounded-lg"></div>
@@ -131,7 +131,7 @@
             <span class="font-bold">150 likes</span>
         </div>
         <div class="mb-2">
-            <span id="postUsernameCaption" class="font-bold">{{ ($post->user->username) }}</span>
+            <span id="postUsernameCaption" class="font-bold">{{ ($user->caption) }}</span>
             <span id="postCaption" class="text-black"></span>
         </div>
         <div class="text-gray-500 mb-2">

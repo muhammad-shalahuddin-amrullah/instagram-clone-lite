@@ -38,7 +38,6 @@
                             <div class="flex items-center space-x-2">
                                     <img src="{{ url($post->user->profile_picture) }}" alt="User profile picture" class="w-10 h-10 rounded-full">
                                     <span class="font-bold">{{ $post->user->username }}</span>
-                                <i class="fas fa-ellipsis-h ml-auto"></i>
                             </div>
                             <div class="mt-4">
                                 @if(strpos($post->file_type, 'image') !== false)
@@ -65,9 +64,6 @@
                                     <span>{{ $post->caption }}</span>
                                 </div>
                                 <div class="mt-2 text-gray-500">
-                                    <span onclick="openModal('{{ $post->id }}')">... more</span>
-                                </div>
-                                <div class="mt-2 text-gray-500">
                                     <span onclick="openModal('{{ $post->id }}')">View all {{ $post->comments_count ?? 0 }} comments</span>
                                 </div>
                                 <div class="mt-2 text-gray-500">
@@ -90,7 +86,7 @@
                 <i class="fas fa-plus text-xl cursor-pointer" onclick="toggleUploadModal()"></i>
                 <i class="fas fa-comment-dots text-xl"></i>
                 <a href="{{ route('profile.index', ['username' => auth()->user()->username]) }}">
-                        <img src="https://picsum.photos/200" alt="Profile picture" class="w-6 h-6 rounded-full self-center">
+                        <img src="{{ url($user->profile_picture) }}" alt="Profile picture" class="w-6 h-6 rounded-full self-center">
                     </a>
             </div>
         </div>
